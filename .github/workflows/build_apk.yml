@@ -18,12 +18,15 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
-          java-version: '17' # Voltamos para o Java correto
+          java-version: '17'
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable' # Removemos a trava '3.22.0' para o Flutter se ajustar sozinho!
+          channel: 'stable'
+
+      - name: Recriar pastas Android e iOS que estao faltando
+        run: flutter create .
 
       - name: Install dependencies
         run: flutter pub get
