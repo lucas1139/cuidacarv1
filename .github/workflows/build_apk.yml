@@ -18,15 +18,21 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
-          java-version: '11' # Mudamos de 17 para 11 para aceitar seu Gradle antigo!
+          java-version: '17' # Voltamos para o Java correto
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.22.0'
+          channel: 'stable' # Removemos a trava '3.22.0' para o Flutter se ajustar sozinho!
 
       - name: Install dependencies
         run: flutter pub get
 
       - name: Build APK
-        run: flutter build apk --debug --no-pub # Força o build ignorando travas de versão
+        run: flutter build apk --debug
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release
+          path: build/app/outputs/flutter-apk/app-debug.apk
