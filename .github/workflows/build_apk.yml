@@ -6,6 +6,9 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: write # Muito importante: Dá permissão pro robô salvar no seu GitHub
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -25,8 +28,16 @@ jobs:
         with:
           channel: 'stable'
 
-      - name: Recriar pastas Android e iOS que estao faltando
+      - name: Recriar pastas estruturais (Android, iOS)
         run: flutter create .
+
+      - name: Salvar as pastas no GitHub para sempre
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add android/ ios/ web/ macos/ linux/ windows/
+          git commit -m "Recriando pastas estruturais do Flutter" || echo "Sem mudanças para salvar"
+          git push
 
       - name: Install dependencies
         run: flutter pub get
